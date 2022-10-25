@@ -1,22 +1,19 @@
 version: "3.2"
+
 services:
   satis:
-    image: ypereirareis/docker-satis:${IMAGE_VERSION:-3.4.0-debian-bullseye-php81-composer2}
+    # image: ypereirareis/docker-satis:${IMAGE_VERSION:-3.4.0-debian-bullseye-php81-composer2}
     build: ./
     container_name: satis
     hostname: satis
-    networks:
-      - webproxy
+    ports: 
+      - "8091:80"
     volumes:
       - "/var/tmp/composer:/var/www/.composer"
       - "~/.ssh/id_rsa:/var/tmp/id"
       - "./config:/satisfy/config_tmp"
+      - "./nginx/passwd:/home/passwd"
     environment:
-      PRIVATE_REPO_DOMAIN_LIST: bitbucket.org gitlab.com github.com
-      CRONTAB_FREQUENCY: "*/1 * * * *"
+      PRIVATE_REPO_DOMAIN_LIST: github.com
+      CRONTAB_FREQUENCY: "*/10 * * * *"
       VIRTUAL_HOST: ${VHOST}
-
-networks:
-  webproxy:
-    external:
-      name: ${PROXY_NETWORK}

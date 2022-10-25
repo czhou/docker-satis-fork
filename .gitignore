@@ -2,3 +2,4 @@
 .env
 config/parameters.satisfy.yml
 config/satis.json
+nginx/passwd

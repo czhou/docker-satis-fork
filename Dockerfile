@@ -5,6 +5,11 @@ MAINTAINER Yannick Pereira-Reis <yannick.pereira.reis@gmail.com>
 
 ENV DEBIAN_FRONTEND noninteractive
 
+# 设置系统
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+# 切换到国内源并安装必须的软件包
+RUN sed -i 's#http://deb.debian.org#http://mirrors.163.com#g' /etc/apt/sources.list
 RUN apt-get update \
     && apt-get upgrade -y \
     && apt-get install -y --no-install-recommends \
@@ -42,14 +47,15 @@ RUN apt-get update \
 	&& apt-get clean \
     && rm -Rf /var/lib/apt/lists/* /usr/share/man/* /usr/share/doc/* /tmp/* /var/tmp/*
 
-RUN sed -i "s/;date.timezone =.*/date.timezone = UTC/" /etc/php/8.1/cli/php.ini \
-	&& sed -i "s/;date.timezone =.*/date.timezone = UTC/" /etc/php/8.1/fpm/php.ini \
+RUN sed -i "s/;date.timezone =.*/date.timezone = Asia\/Shanghai/" /etc/php/8.1/cli/php.ini \
+	&& sed -i "s/;date.timezone =.*/date.timezone = Asia\/Shanghai/" /etc/php/8.1/fpm/php.ini \
 	&& echo "daemon off;" >> /etc/nginx/nginx.conf \
 	&& sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php/8.1/fpm/php-fpm.conf \
 	&& sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/8.1/fpm/php.ini \
 	&& sed -i "s/;decorate_workers_output/decorate_workers_output/" /etc/php/8.1/fpm/pool.d/www.conf \
 	&& sed -i "s/;clear_env/clear_env/" /etc/php/8.1/fpm/pool.d/www.conf
 
+ADD nginx/default   /etc/nginx/sites-available/default
 ADD nginx/default   /etc/nginx/sites-available/default
 
 # Install ssh key
@@ -60,7 +66,8 @@ ADD scripts /app/scripts
 # Install Composer, satis and satisfy
 ENV COMPOSER_HOME /var/www/.composer
 RUN chmod +x /app/scripts/composer_install.sh \
-    && /app/scripts/composer_install.sh
+    && /app/scripts/composer_install.sh \
+    && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
 
 #############################################################################################"
 ##
