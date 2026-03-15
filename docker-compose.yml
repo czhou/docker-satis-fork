@@ -1,6 +1,6 @@
 services:
   satis:
-    image: fidy-satis:latest
+    image: dockerhub.fidy.net/fidy_tools/satis:latest
     container_name: satis
     hostname: satis
     restart: unless-stopped

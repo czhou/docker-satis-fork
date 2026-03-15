@@ -52,9 +52,9 @@ fi
 
 STEP="CONFIG"
 echo " >>> Resetting config files (parameters.yml and satis.json)"
+mkdir -p /satisfy/config
 test -e /satisfy/config_tmp/parameters.satisfy.yml && rm -rf /satisfy/config/parameters.yml && ln -s /satisfy/config_tmp/parameters.satisfy.yml /satisfy/config/parameters.yml
 test -e /satisfy/config_tmp/satis.json && rm -rf /satisfy/satis.json && ln -s /satisfy/config_tmp/satis.json /satisfy/satis.json
-
 
 STEP="SSH"
 touch ${USER_HOME}/.ssh/known_hosts
@@ -81,6 +81,11 @@ cp /var/tmp/id "${USER_HOME}/.ssh/id_rsa" && chmod 600 "${USER_HOME}/.ssh/id_rsa
 STEP="PERMISSIONS"
 chown -R www-data:www-data /var/www
 chown -R www-data:www-data /satisfy/satis.json && chmod 777 /satisfy/satis.json
+
+STEP="BUILD"
+echo " >>> Building Satis repository"
+git config --global --add safe.directory '*'
+php /satisfy/bin/satis build /satisfy/satis.json /satisfy/web
 
 STEP="END"
 
