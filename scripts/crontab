@@ -1,2 +1,2 @@
 # 设置为每小时执行一次
-5 * * * * root /app/scripts/build.sh >> /var/log/satis-cron.log 2>&1
+5 3 * * * root /app/scripts/build.sh >> /var/log/satis-cron.log 2>&1
