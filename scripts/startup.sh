@@ -85,7 +85,7 @@ chown -R www-data:www-data /satisfy/satis.json && chmod 777 /satisfy/satis.json
 STEP="BUILD"
 echo " >>> Building Satis repository"
 git config --global --add safe.directory '*'
-php /satisfy/bin/satis build /satisfy/satis.json /satisfy/web
+sudo -u www-data php /satisfy/bin/satis build /satisfy/satis.json /satisfy/web
 
 STEP="END"
 

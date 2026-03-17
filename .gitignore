@@ -6,3 +6,4 @@ nginx/passwd
 composer_cache/
 www/
 log/
+web/

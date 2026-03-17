@@ -9,6 +9,7 @@ services:
     volumes:
       - "./composer_cache:/var/www/.composer"
       - "./www:/var/www"
+      - "./web:/satisfy/web"
       - "~/.ssh/id_rsa:/var/tmp/id"
       - "./config:/satisfy/config_tmp"
       - "./nginx/passwd:/home/passwd"
